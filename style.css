@@ -1,0 +1,141 @@
+body {
+  font-family: "Arial", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
+}
+
+.weather-app {
+  max-width: 400px;
+  margin: 50px auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.header,
+.location,
+.current-weather {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.temperature {
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.forecast {
+  margin-top: 20px;
+}
+
+.day {
+  border-top: 1px solid #ccc;
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.day-name,
+.day-temperature {
+  font-size: 16px;
+}
+
+#button {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#button:hover {
+  background-color: #45a049;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.button-container .location-button {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button-container .location-button:hover {
+  background-color: #646d64;
+}
+
+.button-container .icon-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.button-container .icon-button.blue {
+  background-color: #007bff;
+}
+
+.button-container .icon-button.red {
+  background-color: #dc3545;
+}
+
+.button-container .icon-button:hover {
+  background-color: #646d64;
+}
+
+.button-container .icon-button img {
+  width: 15px;
+  height: 16px;
+  margin-right: 0px;
+}
+
+#edit_form,
+#dataID, #labelDataID {
+  display: none;
+}
