@@ -15,6 +15,7 @@ function fetchData(apiURL, options = {}) {
 
 function displayTemperature(location) {
   console.log("Displaying temperature for:", location.name);
+  
   document.getElementById("city").innerText = location.name || "--";
   document.getElementById("kanton, country").innerText =
     `${location.region}, ${location.country}` || "--, --";
@@ -35,8 +36,10 @@ function modifyEntry(location) {
   var editForm = document.getElementById("edit_form");
   editForm.style.display = "block";
 
+  // Fetch details of the selected location
   fetchData(`${apiURL}/${encodeURIComponent(id)}`)
     .then((data) => {
+      // Open the modal or navigate to the edit page
       document.getElementById("editName").value = data.name;
       document.getElementById("editRegion").value = data.region;
       document.getElementById("editCountry").value = data.country;
@@ -73,6 +76,7 @@ function submitEditForm() {
   };
 
   id = document.getElementById("dataID").value;
+  // Send a PUT request to update the location details
   fetch(`${apiURL}/${encodeURIComponent(id)}`, {
     method: "PUT",
     headers: {
@@ -82,7 +86,7 @@ function submitEditForm() {
   })
     .then((response) => response.json())
     .then((data) => {
-      fetchAndCreateButtons();
+      fetchAndCreateButtons(); // Update the UI with the modified data
       console.log("Entry modified successfully:", data);
 
       var editForm = document.getElementById("edit_form");
@@ -94,6 +98,7 @@ function submitEditForm() {
       console.error("Fetch error:", error);
     });
 
+  // Close the modal or navigate back to the main page
 }
 
 function deleteEntry(location) {
@@ -158,7 +163,19 @@ function createIconButton(icon, color, onClick) {
 }
 
 function fetchAndCreateButtons() {
-  fetchData(apiURL)
+  const accessToken = sessionStorage.getItem("accessToken");
+
+  if (!accessToken) {
+    console.error("User not authenticated.");
+    return;
+  }
+
+  // Fetch weather data using the access token
+  fetchData(apiUrl, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
     .then(createLocationButtons)
     .catch((error) => {
       console.error("Error fetching and creating buttons:", error);
@@ -166,6 +183,13 @@ function fetchAndCreateButtons() {
 }
 
 function submitAddForm() {
+  const accessToken = sessionStorage.getItem("accessToken");
+
+  if (!accessToken) {
+    console.error("User not authenticated.");
+    return;
+  }
+
   const formData = {
     name: document.getElementById("name").value,
     region: document.getElementById("region").value,
@@ -176,14 +200,21 @@ function submitAddForm() {
     },
   };
 
+  // Send a POST request to add a new location
   fetch(apiURL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify(formData),
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      }
+      return response.json();
+    })
     .then((data) => {
       fetchAndCreateButtons();
       console.log("New entry created:", data);
@@ -192,5 +223,3 @@ function submitAddForm() {
       console.error("Fetch error:", error);
     });
 }
-
-window.onload = fetchAndCreateButtons;

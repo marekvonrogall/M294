@@ -7,7 +7,7 @@ body {
 
 .weather-app {
   max-width: 400px;
-  margin: 50px auto;
+  margin: 20px auto;
   background-color: #fff;
   padding: 20px;
   border-radius: 10px;
@@ -37,50 +37,11 @@ body {
   justify-content: space-between;
 }
 
-.day-name,
-.day-temperature {
-  font-size: 16px;
-}
-
-#button {
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: bold;
-  color: #fff;
-  background-color: #4caf50;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-#button:hover {
-  background-color: #45a049;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-}
-
 input {
   width: 100%;
   padding: 8px;
   margin-bottom: 10px;
   box-sizing: border-box;
-}
-
-button {
-  background-color: #4caf50;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #45a049;
 }
 
 .button-container {
@@ -95,47 +56,75 @@ button:hover {
   padding: 10px;
   font-size: 16px;
   font-weight: bold;
-  color: #fff;
-  background-color: #4caf50;
-  border: none;
   border-radius: 5px;
   cursor: pointer;
+  background-color: #b3e751;
+  color: white;
   transition: background-color 0.3s ease;
 }
 
-.button-container .location-button:hover {
-  background-color: #646d64;
-}
-
 .button-container .icon-button {
-  background-color: #4caf50;
-  color: white;
   padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
   cursor: pointer;
   margin-left: 5px;
 }
 
 .button-container .icon-button.blue {
-  background-color: #007bff;
+  background-color: #72b2f7;
 }
 
 .button-container .icon-button.red {
-  background-color: #dc3545;
+  background-color: #e65f6c;
 }
 
-.button-container .icon-button:hover {
+.location-button:hover,
+.icon-button.blue:hover,
+.icon-button.red:hover {
   background-color: #646d64;
 }
 
 .button-container .icon-button img {
   width: 15px;
-  height: 16px;
+  height: 15.5px;
   margin-right: 0px;
 }
 
 #edit_form,
-#dataID, #labelDataID {
+#dataID,
+#labelDataID {
   display: none;
+}
+
+.login-container {
+  max-width: 400px;
+  margin: 50px auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #ffa600;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #646d64;
 }
