@@ -10,7 +10,28 @@
     <!-- New script for login -->
   </head>
   <body>
-    <div id="app">
+    <header>
+      <h1>Wetter Applikation</h1>
+    </header>
+
+    <nav>
+      <a href="#" onclick="showPage('app')">WetterApp</a>
+      <a href="#" onclick="showPage('about')">Über diese Website</a>
+      <a href="#" onclick="showPage('contact')">Kontakt</a>
+    </nav>
+  
+    <div id="about" class="page">
+      <h2>Über diese Website</h2>
+      <p>Diese Website wurde für das Modul 294 erstellt.</p>
+    </div>
+  
+    <div id="contact" class="page">
+      <h2>Kontakt</h2>
+      <p>Name: Marek von Rogall <br> E-Mail: M.vonRogall.inf22@stud.bbbaden.ch</p>
+
+    </div>
+
+    <div id="app" class="page">
       <!-- Login Form -->
       <div id="loginFormContainer" class="login-container">
         <h2>Login</h2>
@@ -35,20 +56,11 @@
             <h2 id="kanton, country">Kanton, Land</h2>
           </div>
           <div class="current-weather">
-            <div class="temperature" id="temperature_today">--°C</div>
+            <p class="temperature" id="display-temperature">--°C</p>
           </div>
           <div class="forecast">
-            <div class="day">
-              <div class="day-name">Montag</div>
-              <div class="day-temperature" id="day-temperature-monday">
-                --°C
-              </div>
-            </div>
-            <div class="day">
-              <div class="day-name">Dienstag</div>
-              <div class="day-temperature" id="day-temperature-tuesday">
-                --°C
-              </div>
+            <div class="weather-condition">
+              <div id="condition-rain">Regen: --</div>
             </div>
           </div>
         </div>
@@ -75,13 +87,11 @@
             <label for="editCountry">Country:</label>
             <input type="text" id="editCountry" required />
 
-            <label for="editMondayTemperature">Monday Temperature (°C):</label>
-            <input type="number" id="editMondayTemperature" required />
+            <label for="editTemperature">Temperature (°C):</label>
+            <input type="number" id="editTemperature" required />
 
-            <label for="editTuesdayTemperature"
-              >Tuesday Temperature (°C):</label
-            >
-            <input type="number" id="editTuesdayTemperature" required />
+            <label for="editRainy">Rainy?:</label>
+            <input type="checkbox" id="editRainy" />
 
             <label for="dataID" id="labelDataID">EntryID:</label>
             <input type="text" id="dataID" required readonly />
@@ -105,26 +115,19 @@
             <label for="country">Country:</label>
             <input type="text" id="country" name="country" required />
 
-            <label for="mondayTemperature">Monday Temperature (°C):</label>
-            <input
-              type="number"
-              id="mondayTemperature"
-              name="mondayTemperature"
-              required
-            />
+            <label for="temperature">Temperature (°C):</label>
+            <input type="number" id="temperature" name="temperature" required />
 
-            <label for="tuesdayTemperature">Tuesday Temperature (°C):</label>
-            <input
-              type="number"
-              id="tuesdayTemperature"
-              name="tuesdayTemperature"
-              required
-            />
+            <label for="rainy">Rainy?:</label>
+            <input type="checkbox" id="rainy" name="rainy" />
 
             <button type="button" onclick="submitAddForm()">Submit</button>
           </form>
         </div>
       </div>
     </div>
+    <footer>
+      <p>Marek von Rogall - M294</p>
+    </footer>
   </body>
 </html>

@@ -1,52 +1,43 @@
 const apiURL = "http://localhost:2940/api/v1/entities";
 
-function fetchData(apiURL, options = {}) {
-  return fetch(apiURL, options)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} - ${response.statusText}`);
-      }
-      return response.json();
-    })
-    .catch((error) => {
-      console.error("Fetch error:", error);
-    });
-}
-
-function displayTemperature(location) {
-  console.log("Displaying temperature for:", location.name);
-  
-  document.getElementById("city").innerText = location.name || "--";
+function displayTemperature(data) {
+  document.getElementById("city").innerText = data.location.name || "--";
   document.getElementById("kanton, country").innerText =
-    `${location.region}, ${location.country}` || "--, --";
-  document.getElementById("temperature_today").innerText =
-    `${location.temperature.monday}°C` || "--°C";
-  document.getElementById("day-temperature-monday").innerText =
-    `${location.temperature.monday}°C` || "--°C";
-  document.getElementById("day-temperature-tuesday").innerText =
-    `${location.temperature.tuesday}°C` || "--°C";
+    `${data.location.region}, ${data.location.country}` || "--, --";
+  document.getElementById("display-temperature").innerText =
+    `${data.location.temperature}°C` || "--°C";
+  document.getElementById("condition-rain").innerText =
+    `Regen: ${data.location.isRainy}` || "Regen: --";
 }
 
-function modifyEntry(location) {
-  console.log("Modifying entry:", location.name);
-  const id = location.id;
+function modifyEntry(data) {
+  console.log("Modifying entry:", data.location.name);
+  const id = data.id;
+  const accessToken = sessionStorage.getItem("accessToken");
 
   var addForm = document.getElementById("add_form");
   addForm.style.display = "none";
   var editForm = document.getElementById("edit_form");
   editForm.style.display = "block";
 
-  // Fetch details of the selected location
-  fetchData(`${apiURL}/${encodeURIComponent(id)}`)
+  fetch(`${apiURL}/${id}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      }
+      return response.json();
+    })
     .then((data) => {
-      // Open the modal or navigate to the edit page
-      document.getElementById("editName").value = data.name;
-      document.getElementById("editRegion").value = data.region;
-      document.getElementById("editCountry").value = data.country;
-      document.getElementById("editMondayTemperature").value =
-        data.temperature.monday;
-      document.getElementById("editTuesdayTemperature").value =
-        data.temperature.tuesday;
+      document.getElementById("editName").value = data.location.name;
+      document.getElementById("editRegion").value = data.location.region;
+      document.getElementById("editCountry").value = data.location.country;
+      document.getElementById("editTemperature").value = data.location.temperature;
+      document.getElementById("editRainy").checked = data.location.isRainy;
       document.getElementById("dataID").value = data.id;
     })
     .catch((error) => {
@@ -64,29 +55,34 @@ function cancelAddForm() {
 
 function submitEditForm() {
   const updatedFormData = {
-    name: document.getElementById("editName").value,
-    region: document.getElementById("editRegion").value,
-    country: document.getElementById("editCountry").value,
-    temperature: {
-      monday: parseInt(document.getElementById("editMondayTemperature").value),
-      tuesday: parseInt(
-        document.getElementById("editTuesdayTemperature").value
-      ),
-    },
+    location:{
+      name: document.getElementById("editName").value,
+      region: document.getElementById("editRegion").value,
+      country: document.getElementById("editCountry").value,
+      temperature: parseInt(document.getElementById("editTemperature").value),
+      isRainy: document.getElementById("editRainy").checked,
+    }
   };
 
   id = document.getElementById("dataID").value;
-  // Send a PUT request to update the location details
-  fetch(`${apiURL}/${encodeURIComponent(id)}`, {
+  const accessToken = sessionStorage.getItem("accessToken");
+
+  fetch(`${apiURL}/${id}`, {
     method: "PUT",
     headers: {
+      Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(updatedFormData),
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      }
+      return response.json();
+    })
     .then((data) => {
-      fetchAndCreateButtons(); // Update the UI with the modified data
+      fetchAndCreateButtons();
       console.log("Entry modified successfully:", data);
 
       var editForm = document.getElementById("edit_form");
@@ -97,20 +93,22 @@ function submitEditForm() {
     .catch((error) => {
       console.error("Fetch error:", error);
     });
-
-  // Close the modal or navigate back to the main page
 }
 
 function deleteEntry(location) {
   const id = location.id;
+  const accessToken = sessionStorage.getItem("accessToken");
 
-  fetchData(`${apiURL}/${encodeURIComponent(id)}`, {
+  fetch(`${apiURL}/${id}`, {
     method: "DELETE",
     headers: {
-      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
     },
   })
-    .then(() => {
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      }
       console.log("Entry deleted successfully:", id);
       fetchAndCreateButtons();
     })
@@ -123,20 +121,20 @@ function createLocationButtons(locations) {
   const locationButtonsContainer = document.getElementById("locationButtons");
   locationButtonsContainer.innerHTML = "";
 
-  locations.forEach((location) => {
+  locations.forEach((data) => {
     const buttonContainer = document.createElement("div");
     buttonContainer.className = "button-container";
 
-    const mainButton = createButton(location.name, () => {
-      displayTemperature(location);
+    const mainButton = createButton(data.location.name, () => {
+      displayTemperature(data);
     });
 
     const editButton = createIconButton("edit", "blue", () => {
-      modifyEntry(location);
+      modifyEntry(data);
     });
 
     const deleteButton = createIconButton("delete", "red", () => {
-      deleteEntry(location);
+      deleteEntry(data);
     });
 
     buttonContainer.appendChild(mainButton);
@@ -165,17 +163,17 @@ function createIconButton(icon, color, onClick) {
 function fetchAndCreateButtons() {
   const accessToken = sessionStorage.getItem("accessToken");
 
-  if (!accessToken) {
-    console.error("User not authenticated.");
-    return;
-  }
-
-  // Fetch weather data using the access token
-  fetchData(apiUrl, {
+  fetch(apiURL, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
   })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      }
+      return response.json();
+    })
     .then(createLocationButtons)
     .catch((error) => {
       console.error("Error fetching and creating buttons:", error);
@@ -185,22 +183,16 @@ function fetchAndCreateButtons() {
 function submitAddForm() {
   const accessToken = sessionStorage.getItem("accessToken");
 
-  if (!accessToken) {
-    console.error("User not authenticated.");
-    return;
-  }
-
   const formData = {
-    name: document.getElementById("name").value,
-    region: document.getElementById("region").value,
-    country: document.getElementById("country").value,
-    temperature: {
-      monday: parseInt(document.getElementById("mondayTemperature").value),
-      tuesday: parseInt(document.getElementById("tuesdayTemperature").value),
+    location: {
+      name: document.getElementById("name").value,
+      region: document.getElementById("region").value,
+      country: document.getElementById("country").value,
+      temperature: parseInt(document.getElementById("temperature").value),
+      isRainy: document.getElementById("rainy").checked,
     },
   };
 
-  // Send a POST request to add a new location
   fetch(apiURL, {
     method: "POST",
     headers: {
@@ -222,4 +214,18 @@ function submitAddForm() {
     .catch((error) => {
       console.error("Fetch error:", error);
     });
+}
+
+function showPage(pageId) {
+  // Hide all pages
+  var pages = document.querySelectorAll('.page');
+  pages.forEach(function(page) {
+    page.style.display = 'none';
+  });
+
+  // Show the selected page
+  var selectedPage = document.getElementById(pageId);
+  if (selectedPage) {
+    selectedPage.style.display = 'block';
+  }
 }

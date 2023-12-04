@@ -30,7 +30,7 @@ body {
   margin-top: 20px;
 }
 
-.day {
+#condition-rain {
   border-top: 1px solid #ccc;
   padding: 10px 0;
   display: flex;
@@ -127,4 +127,40 @@ button {
 
 button:hover {
   background-color: #646d64;
+}
+
+header {
+  background-color: #d19e41;
+  color: white;
+  text-align: center;
+  padding: 1em;
+}
+
+footer {
+  background-color: #865f17;
+  color: white;
+  text-align: center;
+  padding: 1em;
+}
+
+nav {
+  background-color: #865f17;
+  overflow: hidden;
+  text-align: center;
+}
+
+nav a {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.page {
+  display: none;
+}
+
+#app {
+  display: block;
 }
