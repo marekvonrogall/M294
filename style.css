@@ -91,7 +91,9 @@ input {
 
 #edit_form,
 #dataID,
-#labelDataID {
+#labelDataID,
+.page
+{
   display: none;
 }
 
@@ -157,10 +159,12 @@ nav a {
   text-decoration: none;
 }
 
-.page {
-  display: none;
-}
-
 #app {
   display: block;
+}
+
+.login-container #wrongPasswordLabel {
+  color: red;
+  margin-top: 15px;
+  display: none;
 }

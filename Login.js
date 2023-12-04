@@ -29,6 +29,7 @@ function loginAndShowApp() {
     })
     .catch((error) => {
       console.error("Login failed:", error);
+      document.getElementById("wrongPasswordLabel").style.display = "block";
     });
 }
 
